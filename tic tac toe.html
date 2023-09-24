@@ -1,0 +1,139 @@
+<style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    #myTable {
+      border-collapse: collapse;
+      width: 450px;
+      height: 450px;
+    }
+    
+    #myTable td {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+      cursor: pointer;
+      width: 33.33%;
+      height: 33.33%;
+      font-size: 2em;
+      transition: background-color 0.3s ease;
+    }
+    #restartButton {
+          display: none;
+          margin-top: 20px;
+          padding: 10px 20px;
+          font-size: 20px;
+          cursor: pointer;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+        }
+        
+        #restartButton:hover {
+          background-color: #45a049;
+        }
+    
+    #myTable td:hover {
+      background-color: #e9e9e9;
+    }
+    
+    #myTable td.X {
+      color: #f00;
+    }
+    
+    #myTable td.O {
+      color: #00f;
+    }
+    </style>
+    
+    <table id="myTable">
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    
+    <button id="restartButton">Restart Game</button>
+    
+
+
+
+        
+        
+        
+        <script>
+        let turn = 'X';
+        
+        function checkWin() {
+      const cells = Array.from(document.querySelectorAll('#myTable td'));
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+    
+      for (let line of lines) {
+        if (
+          cells[line[0]].textContent &&
+          cells[line[0]].textContent === cells[line[1]].textContent &&
+          cells[line[1]].textContent === cells[line[2]].textContent
+        ) {
+          return cells[line[0]].textContent;
+        }
+      }
+    }
+        
+        function checkDraw() {
+          return Array.from(document.querySelectorAll('#myTable td')).every(cell => cell.textContent);
+        }
+        
+        document.querySelectorAll('#myTable td').forEach(cell => {
+          cell.addEventListener('click', function() {
+            if (!this.textContent) {
+              this.textContent = turn;
+              this.classList.add(turn);
+              const winner = checkWin();
+              if (winner) {
+                setTimeout(() => {
+                  alert(winner + ' wins!');
+                  document.getElementById('restartButton').style.display = 'block';
+                }, 100);
+              } else if (checkDraw()) {
+                setTimeout(() => {
+                  alert('Draw!');
+                  document.getElementById('restartButton').style.display = 'block';
+                }, 100);
+              }
+              turn = turn === 'X' ? 'O' : 'X';
+            }
+          });
+        });
+        
+        document.getElementById('restartButton').addEventListener('click', function() {
+          location.reload();
+        });
+        </script>
